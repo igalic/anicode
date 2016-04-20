@@ -15,6 +15,8 @@ anicode prints out a table unicode characters and their names, based on the
 *search string* that matches those names. If there's [agrep(1)] installed,
 `anicode` will use that to provide fuzzy search.
 
+The last match will be copied into the clipboard.
+
 ## EXAMPLES
 
 ```fish

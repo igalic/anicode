@@ -3,7 +3,8 @@
 
 # anicode
 
-Find unicode characters matching your search string
+Find arbitrary unicode characters matching your search string. The last match
+will be copied into your clipboard.
 
 ## Install
 
@@ -16,16 +17,8 @@ fisher i anicode
 ## Usage
 
 ```
-fisher anicode [options] [--quiet] [--help]
+fisher anicode <search pattern>
 ```
-
-## Options
-
-* -q, --quiet<br>
-    Enable quiet mode.
-
-* -h, --help<br>
-    Show usage help.
 
 [travis-link]: https://travis-ci.org/igalic/anicode
 [travis-badge]: https://img.shields.io/travis/igalic/anicode.svg?style=flat-square
