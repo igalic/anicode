@@ -1,0 +1,3 @@
+test "$TESTNAME"
+    -z ""
+end
