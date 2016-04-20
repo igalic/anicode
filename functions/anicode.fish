@@ -9,12 +9,12 @@ end
 
 function __anicode_prompt
   set message $argv[1]
-  function __prompt --inherit-variable message
-    echo "The file with the required unicode data is not found, do you want me to download it from http://www.unicode.org ? [Y/n] "
-    functions -e __prompt
+  function __prompt -V message
+    echo "$message [Y/n] "
   end
   while true
-    read -l confirm --prompt=__prompt
+    read -p __prompt -l confirm
+    functions -e __prompt
     switch $confirm
       case Y y
         return 0
@@ -30,20 +30,19 @@ function __anicode_install
     mkdir $test
   end
   function __msg
-    echo -n "The file with the required unicode data is not found,"
-    echo -n " do you want me to download it from http://www.unicode.org ?"
+    echo "Required unicode data was not found, want me to download it from http://www.unicode.org ?"
   end
   if not test -e "$root/unicode.csv"
-    set prompt (__msg)
-    if __anicode_prompt "$prompt"
+    if __anicode_prompt (__msg)
        set cmd "curl -o $root/unicode.csv http://www.unicode.org/Public/8.0.0/ucd/UnicodeData.txt"
        if type spin > /dev/null
          spin $cmd
        else
-        eval $cmd
+         eval $cmd
        end
     end
   end
+  functions -e __anicode_install
 end
 
 function __anicode_grep
@@ -67,7 +66,7 @@ function anicode
     set anygrep (__anicode_grep)
     set ucdata $home/unicode.csv
 
-    set -lu $last
+    set last
     eval $anygrep -i "\"$argv\"" $ucdata | awk -F';' '{ printf "%s\t%s\n", $1, $2 }' | \
       while read -l char -l name
         set last $char
