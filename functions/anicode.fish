@@ -46,19 +46,19 @@ function __anicode_install
 end
 
 function __anicode_grep
-  if type grep > /dev/null
-    echo grep
+  if type agrep > /dev/null ^ /dev/null
+    echo agrep -1
     return
   end
-  echo agrep -1
+  echo grep
 end
 
 function __anicode_xclip
-  if type pbcopy > /dev/null
-    echo pbcopy
-    return
-  end
-  echo xsel -b
+    if type pbcopy > /dev/null ^ /dev/null
+        echo pbcopy
+        return
+    end
+    echo xsel -b
 end
 
 function anicode
@@ -69,10 +69,10 @@ function anicode
     set last
     eval $anygrep -i "\"$argv\"" $ucdata | awk -F';' '{ printf "%s\t%s\n", $1, $2 }' | \
       while read -l char -l name
-        set last $char
-        printf "\U$char\t$name\n"
+          set last $char
+          printf "\U$char\t$name\n"
       end
-    echo $last | eval (__anicode_xclip)
+    printf "\U$last" | eval (__anicode_xclip)
 end
 
 __anicode_install
