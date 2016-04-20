@@ -27,7 +27,7 @@ end
 function __anicode_install
   set root (__anicode_home)
   if not test -e "$root"
-    mkdir $test
+    mkdir $root
   end
   function __msg
     echo "Required unicode data was not found, want me to download it from http://www.unicode.org ?"
