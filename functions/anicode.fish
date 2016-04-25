@@ -7,39 +7,18 @@ function __anicode_home
   echo $config/anicode
 end
 
-function __anicode_prompt
-  set message $argv[1]
-  function __prompt -V message
-    echo "$message [Y/n] "
-  end
-  while true
-    read -p __prompt -l confirm
-    functions -e __prompt
-    switch $confirm
-      case Y y
-        return 0
-      case '' N n
-        return 1
-    end
-  end
-end
-
 function __anicode_install
   set root (__anicode_home)
   if not test -e "$root"
     mkdir $root
   end
   function __msg
-    echo "Required unicode data was not found, want me to download it from http://www.unicode.org ?"
+    echo "Required unicode data was not found, want me to download it from http://www.unicode.org? [y/n]"
   end
   if not test -e "$root/unicode.csv"
-    if __anicode_prompt (__msg)
-       set cmd "curl -o $root/unicode.csv http://www.unicode.org/Public/8.0.0/ucd/UnicodeData.txt"
-       if type spin > /dev/null
-         spin $cmd
-       else
-         eval $cmd
-       end
+    set desired (get --prompt=(__msg) --rule="[yn]" --no-case)
+    if test "$desired" = "y" -o "$desired" = "Y"
+       spin "curl -o $root/unicode.csv http://www.unicode.org/Public/8.0.0/ucd/UnicodeData.txt"
     end
   end
   functions -e __anicode_install
