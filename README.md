@@ -1,17 +1,16 @@
 [![Build Status][travis-badge]][travis-link]
 [![Slack Room][slack-badge]][slack-link]
 
-# anicode
+# Anicode
 
-Find arbitrary unicode characters matching your search string. The last match
-will be copied into your clipboard.
+Find arbitrary unicode characters matching a *search pattern*. The last result match will be copied to your clipboard.
 
 ## Install
 
-With [Fisherman]
+With [fisherman]
 
 ```
-fisher i anicode
+fisher anicode
 ```
 
 ## Usage
@@ -20,8 +19,15 @@ fisher i anicode
 fisher anicode <search pattern>
 ```
 
+## Example
+
+```
+anicode yellow heart
+💛
+```
+
 [travis-link]: https://travis-ci.org/igalic/anicode
-[travis-badge]: https://img.shields.io/travis/igalic/anicode.svg?style=flat-square
-[slack-link]: https://fisherman-wharf.herokuapp.com/
-[slack-badge]: https://img.shields.io/badge/slack-join%20the%20chat-00B9FF.svg?style=flat-square
-[Fisherman]: https://github.com/fisherman/fisherman
+[travis-badge]: https://img.shields.io/travis/igalic/anicode.svg
+[slack-link]: https://fisherman-wharf.herokuapp.com
+[slack-badge]: https://fisherman-wharf.herokuapp.com/badge.svg
+[fisherman]: https://github.com/fisherman/fisherman
