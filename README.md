@@ -26,8 +26,8 @@ anicode yellow heart
 💛
 ```
 
-[travis-link]: https://travis-ci.org/igalic/anicode
-[travis-badge]: https://img.shields.io/travis/igalic/anicode.svg
+[travis-link]: https://travis-ci.org/fisherman/anicode
+[travis-badge]: https://img.shields.io/fisherman/fisherman/anicode.svg
 [slack-link]: https://fisherman-wharf.herokuapp.com
 [slack-badge]: https://fisherman-wharf.herokuapp.com/badge.svg
 [fisherman]: https://github.com/fisherman/fisherman
