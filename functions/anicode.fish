@@ -1,31 +1,24 @@
-function __anicode_home
-  if test -n "$XDG_CONFIG_HOME"
-    set config $XDG_CONFIG_HOME
-  else
-    set config ~/.config
-  end
-  echo $config/anicode
+# environment
+set -gx ANICODE_CFG
+set -gx ANICODE_CACHE
+
+if test -n "$XDG_CONFIG_HOME"
+  set ANICODE_CFG $XDG_CONFIG_HOME/anicode
+else
+  set ANICODE_CFG ~/.config/anicode
 end
 
-function __anicode_install
-  set root (__anicode_home)
-  if not test -e "$root"
-    mkdir $root
-  end
-  function __msg
-    echo "Required unicode data was not found, want me to download it from http://www.unicode.org? [y/n]"
-  end
-  if not test -e "$root/unicode.csv"
-    set desired (get --prompt=(__msg) --rule="[yn]" --no-case)
-    if test "$desired" = "y" -o "$desired" = "Y"
-       spin "curl -o $root/unicode.csv http://www.unicode.org/Public/8.0.0/ucd/UnicodeData.txt"
-    end
-  end
-  functions -e __anicode_install
+if test -n "$XDG_CACHE_HOME"
+  set ANICODE_CACHE $XDG_CACHE_HOME/anicode
+else
+  set ANICODE_CACHE ~/.cache/anicode
 end
 
+set -gx ANICODE_FILE $ANICODE_CACHE/unicode.csv
+
+# helpers
 function __anicode_grep
-  if type agrep > /dev/null ^ /dev/null
+  if type -q agrep
     echo agrep -1
     return
   end
@@ -33,25 +26,52 @@ function __anicode_grep
 end
 
 function __anicode_xclip
-    if type pbcopy > /dev/null ^ /dev/null
+    if type -q pbcopy
         echo pbcopy
         return
     end
     echo xsel -b
 end
 
-function anicode
-    set home (__anicode_home)
-    set anygrep (__anicode_grep)
-    set ucdata $home/unicode.csv
+# initial setup
+function __anicode_install
+  set -l desired
+  mkdir -p $ANICODE_CACHE
+  if test "$DEBIAN_FRONTEND" = "noninteractive"
+    set desired y
+  else
+    set -l prompt "Required unicode data was not found, want me to download it from http://www.unicode.org? [Y/n]"
+    get --prompt="$prompt" --rule="[yn]" --default="y" --no-case | read -l r
+    set desired $r
+  end
 
-    set last
-    eval $anygrep -i "\"$argv\"" $ucdata | awk -F';' '{ printf "%s\t%s\n", $1, $2 }' | \
-      while read -l char -l name
-          set last $char
-          printf "\U$char\t$name\n"
-      end
-    printf "\U$last" | eval (__anicode_xclip)
+  if test "$desired" = "y" -o "$desired" = "Y"
+     spin "curl -o $ANICODE_FILE http://www.unicode.org/Public/8.0.0/ucd/UnicodeData.txt > /dev/null"
+     return 0
+  else
+    return 1
+  end
 end
 
-__anicode_install
+# public api
+function anicode
+    set anygrep (__anicode_grep)
+
+    if not test -e $ANICODE_FILE
+        if not __anicode_install
+          return 1
+        end
+        # functions -e __anicode_install
+    end
+
+    set -l choices
+    set -l labels
+    eval $anygrep -i "( echo $argv)" $ANICODE_FILE | awk -F';' '{ printf "%s\t%s\n", $1, $2 }' | \
+      while read -l char -l name
+          set choices $choices "\U$char"
+          set labels $labels "\U$char\t$name"
+      end
+    menu $labels
+    set -l char $choices[$menu_selected_index]
+    echo $char | eval (__anicode_xclip)
+end
