@@ -73,5 +73,5 @@ function anicode
       end
     menu $labels
     set -l char $choices[$menu_selected_index]
-    echo $char | eval (__anicode_xclip)
+    printf $char | eval (__anicode_xclip)
 end
