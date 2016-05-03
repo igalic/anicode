@@ -64,14 +64,19 @@ function anicode
         # functions -e __anicode_install
     end
 
-    set -l choices
+    set -l options
     set -l labels
-    eval $anygrep -i "( echo $argv)" $ANICODE_FILE | awk -F';' '{ printf "%s\t%s\n", $1, $2 }' | \
+    set -l index
+    eval $anygrep -i "(echo $argv)" $ANICODE_FILE | awk -F';' '{ printf "%s\t%s\n", $1, $2 }' | \
       while read -l char -l name
-          set choices $choices "\U$char"
-          set labels $labels "\U$char\t$name"
+          set options $options "\U$char"
+          set labels $labels (printf "\U$char\t$name")
       end
-    menu $labels
-    set -l char $choices[$menu_selected_index]
+    if test -z "$labels"
+      echo $argv was not found 😢
+      return 1
+    end
+    set index (choices $labels)
+    set -l char $options[$index]
     printf $char | eval (__anicode_xclip)
 end
