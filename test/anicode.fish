@@ -1,6 +1,7 @@
 function setup
   set -gx root (dirname (status -f))
   set -gx source $root/functions/anicode.fish
+  source $source
 end
 
 test "$TESTNAME It should have ANICODE_CFG with XDG values if set"
@@ -37,20 +38,20 @@ end
 
 test "$TESTNAME It should create the dir on installation and ask for installation"
    (
-   mock mkdir 0
-   mock get 0 "echo y"
-   mock spin 0 "echo downloading"
+   mock mkdir 0;
+   mock get 0 "echo y";
+   mock spin 0 "echo downloading";
    __anicode_install
   ) = "downloading" -a $status -eq 0
 end
 
 test "$TESTNAME It should use anygrep for search with params"
    (
-    mock anygrep 0 "echo grep";
-    mock test 0
-    mock grep 0
-    mock awk 0 "echo -e \"0063\nfoo\0\""
-    mock choices 0 "echo 1"
+    mock __anicode_grep 0 "echo grep";
+    mock __anicode_install 0
+    mock grep 0;
+    mock awk 0 "echo 0063\nfoo";
+    mock choices 0 "echo 1";
     mock __anicode_xclip 0 "echo xclip";
     mock xclip 0 "echo c" # c char in hex
     anicode
