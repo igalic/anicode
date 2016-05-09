@@ -37,25 +37,20 @@ end
 
 test "$TESTNAME It should create the dir on installation and ask for installation"
    (
-      source $source;
-      mock mkdir;
-      mock get 0 "echo y";
-      mock spin 0 "echo downloading";
-      __anicode_install
-    ) = "downloading" -a $status -eq 0
+   mock mkdir 0
+   mock get 0 "echo y"
+   mock spin 0 "echo downloading"
+   __anicode_install
+  ) = "downloading" -a $status -eq 0
 end
 
 test "$TESTNAME It should use anygrep for search with params"
    (
-    source $source;
     mock anygrep 0 "echo grep";
-    mock stat 1;
-    mock grep 0;
-    mock get;
-    mock awk 0;
-    mock menu 0;
-    set -l choices '0063'
-    set -l menu_selected_index 1
+    mock test 0
+    mock grep 0
+    mock awk 0 "echo -e \"0063\nfoo\0\""
+    mock choices 0 "echo 1"
     mock __anicode_xclip 0 "echo xclip";
     mock xclip 0 "echo c" # c char in hex
     anicode

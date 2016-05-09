@@ -47,10 +47,10 @@ function __anicode_install
 
   if test "$desired" = "y" -o "$desired" = "Y"
      spin "curl -o $ANICODE_FILE http://www.unicode.org/Public/8.0.0/ucd/UnicodeData.txt > /dev/null"
-     return 0
-  else
-    return 1
+     return
   end
+
+  return 1
 end
 
 # public api
@@ -67,11 +67,13 @@ function anicode
     set -l options
     set -l labels
     set -l index
+
     eval $anygrep -i "(echo $argv)" $ANICODE_FILE | awk -F';' '{ printf "%s\t%s\n", $1, $2 }' | \
       while read -l char -l name
           set options $options "\U$char"
           set labels $labels (printf "\U$char\t$name")
       end
+
     if test -z "$labels"
       echo $argv was not found 😢
       return 1
