@@ -16,7 +16,7 @@ fisher anicode
 ## Usage
 
 ```
-fisher anicode <search pattern>
+anicode <search pattern>
 ```
 
 ## Example
