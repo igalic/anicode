@@ -67,6 +67,7 @@ function anicode
     set -l options
     set -l labels
     set -l index
+    set -l char
 
     eval $anygrep -i "(echo $argv)" $ANICODE_FILE | awk -F';' '{ printf "%s\t%s\n", $1, $2 }' | \
       while read -l char -l name
@@ -78,7 +79,13 @@ function anicode
       echo $argv was not found 😢
       return 1
     end
-    set index (choices $labels)
-    set -l char $options[$index]
+    if test (count $options) -eq 1
+      set index 1
+      set char $options[$index]
+    else
+      set index (choices $labels)
+      set char $options[$index]
+    end
     printf $char | eval (__anicode_xclip)
+    printf "Selected %s, pasted to your clipboard.\n" (printf $char)
 end

@@ -55,7 +55,7 @@ test "$TESTNAME It should use anygrep for search with params"
     mock __anicode_xclip 0 "echo xclip";
     mock xclip 0 "echo c" # c char in hex
     anicode
-  ) = "c"
+  ) = "c" "Selected c, pasted to your clipboard."
 end
 
 test "$TESTNAME It should be able to install with nontinteractive mode"
