@@ -46,7 +46,7 @@ function __anicode_install
   end
 
   if test "$desired" = "y" -o "$desired" = "Y"
-     spin "curl -o $ANICODE_FILE http://www.unicode.org/Public/8.0.0/ucd/UnicodeData.txt > /dev/null"
+     spin "curl -so $ANICODE_FILE http://www.unicode.org/Public/8.0.0/ucd/UnicodeData.txt > /dev/null"
      return
   end
 
