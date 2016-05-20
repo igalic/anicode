@@ -17,12 +17,12 @@ end
 set -gx ANICODE_FILE $ANICODE_CACHE/unicode.csv
 
 # helpers
-function __anicode_grep
+function __anicode_grep -a what -a where
   if type -q agrep
-    echo agrep -1
+    agrep -1 -- $what $where
     return
   end
-  echo grep
+  grep -i -- $what $where
 end
 
 function __anicode_xclip
@@ -55,7 +55,12 @@ end
 
 # public api
 function anicode
-    set anygrep (__anicode_grep)
+    set -l usage "anicode 'search param'"
+
+    if test -z "$argv"
+      echo $usage
+      return 1
+    end
 
     if not test -e $ANICODE_FILE
         if not __anicode_install
@@ -69,14 +74,14 @@ function anicode
     set -l index
     set -l char
 
-    eval $anygrep -i "(echo $argv)" $ANICODE_FILE | awk -F';' '{ printf "%s\t%s\n", $1, $2 }' | \
-      while read -l char -l name
+    __anicode_grep $argv $ANICODE_FILE | awk -F';' '{ printf "%s\t%s\n", $1, $2 }' | while read -l char -l name
           set options $options "\U$char"
           set labels $labels (printf "\U$char\t$name")
       end
 
     if test -z "$labels"
       echo $argv was not found 😢
+      echo $usage
       return 1
     end
     if test (count $options) -eq 1
