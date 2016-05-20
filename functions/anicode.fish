@@ -19,7 +19,7 @@ set -gx ANICODE_FILE $ANICODE_CACHE/unicode.csv
 # helpers
 function __anicode_grep -a what -a where
   if type -q agrep
-    agrep -1 -- $what $where
+    agrep -i1 (echo -en $what | sed -r 's:-:\\\-:g') $where
     return
   end
   grep -i -- $what $where
