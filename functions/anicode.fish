@@ -74,7 +74,7 @@ function anicode
     set -l index
     set -l char
 
-    __anicode_grep $argv $ANICODE_FILE | awk -F';' '{ printf "%s\t%s\n", $1, $2 }' | while read -l char -l name
+    __anicode_grep "$argv" $ANICODE_FILE | awk -F';' '{ printf "%s\t%s\n", $1, $2 }' | while read -l char -l name
           set options $options "\U$char"
           set labels $labels (printf "\U$char\t$name")
       end
