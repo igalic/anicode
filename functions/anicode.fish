@@ -2,6 +2,8 @@
 set -gx ANICODE_CFG
 set -gx ANICODE_CACHE
 
+set UNICODE_DATA_URL 'https://www.unicode.org/Public/11.0.0/ucd/UnicodeData-11.0.0d9.txt'
+
 if test -n "$XDG_CONFIG_HOME"
   set ANICODE_CFG $XDG_CONFIG_HOME/anicode
 else
@@ -46,8 +48,8 @@ function __anicode_install
   end
 
   if test "$desired" = "y" -o "$desired" = "Y"
-     spin "curl -so $ANICODE_FILE http://www.unicode.org/Public/11.0.0/ucd/UnicodeData-11.0.0d1.txt > /dev/null"
-     return
+     spin "curl --fail -so $ANICODE_FILE $UNICODE_DATA_URL > /dev/null"
+     return $status
   end
 
   return 1
