@@ -36,7 +36,6 @@ end
 # initial setup
 function __anicode_install
   set -l desired
-  mkdir -p $ANICODE_CACHE
   if test "$DEBIAN_FRONTEND" = "noninteractive"
     set desired y
   else
@@ -46,7 +45,12 @@ function __anicode_install
   end
 
   if test "$desired" = "y" -o "$desired" = "Y"
-     spin "curl -so $ANICODE_FILE http://www.unicode.org/Public/11.0.0/ucd/UnicodeData-11.0.0d1.txt > /dev/null"
+     if not spin --error /dev/null "curl --create-dirs -fsSo $ANICODE_FILE \
+         https://unicode.org/Public/UCD/latest/ucd/UnicodeData.txt"
+         printf "An error occured, unicode data could not be downloaded."
+         rm $ANICODE_CACHE
+         return 1
+     end
      return
   end
 
