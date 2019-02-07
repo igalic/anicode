@@ -1,4 +1,4 @@
-fisherman/spin
-fisherman/get
-fisherman/choices
-fisherman/getopts
+fishpkg/fish-spin
+fishpkg/fish-get
+markcial/choices
+jorgebucaran/fish-getopts
