@@ -7,7 +7,7 @@ Find arbitrary unicode characters matching a *search pattern*. The last result m
 With [fisherman]
 
 ```
-fisher add igalic/anicode
+fisher install igalic/anicode
 ```
 
 ## Usage

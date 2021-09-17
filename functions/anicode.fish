@@ -40,13 +40,16 @@ function __anicode_install
     set desired y
   else
     set -l prompt "Required unicode data was not found, want me to download it from http://www.unicode.org? [Y/n]"
-    get --prompt="$prompt" --rule="[yn]" --default="y" --no-case | read -l r
+    read --prompt-str="$prompt" -l r
+    if test "$r" = ""
+        set r "y"
+    end
     set desired $r
   end
 
   if test "$desired" = "y" -o "$desired" = "Y"
-     if not spin --error /dev/null "curl --create-dirs -fsSo $ANICODE_FILE \
-         https://unicode.org/Public/UCD/latest/ucd/UnicodeData.txt"
+     if not curl --create-dirs -sSfo $ANICODE_FILE \
+         https://unicode.org/Public/UCD/latest/ucd/UnicodeData.txt
          printf "An error occured, unicode data could not be downloaded."
          rm $ANICODE_CACHE
          return 1
