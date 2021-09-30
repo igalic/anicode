@@ -51,7 +51,7 @@ function __anicode_install
      if not curl --create-dirs -sSfo $ANICODE_FILE \
          https://unicode.org/Public/UCD/latest/ucd/UnicodeData.txt
          printf "An error occured, unicode data could not be downloaded."
-         rm $ANICODE_CACHE
+         rm $ANICODE_FILE
          return 1
      end
      return
